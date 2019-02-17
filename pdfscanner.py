@@ -18,8 +18,11 @@ def extractData(pdf_file, page):
 	return data
 
 def getWordCount(data):
-	data=data.split()
+	data = data.split()
 	return len(data)
+
+def getWords(data):
+    return data.split()
 
 def main():
 	if len(sys.argv)!=2:
@@ -31,21 +34,23 @@ def main():
 		# check if the specified file exists or not
 		try:
 			if os.path.exists(pdfFile):
-				print("file found!")
+				print("Scanning ", pdfFile, " ...")
 		except OSError as err:
 			print(err.reason)
 			exit(1)
 
 
-		# get the word count in the pdf file
-		totalWords = 0
+		# get the words in the pdf file
+		allWords = []
 		numPages = getPageCount(pdfFile)
 		for i in range(numPages):
 			text = extractData(pdfFile, i)
-			totalWords += getWordCount(text)
+			words = getWords(text)
+			for j in words:
+    				allWords.append(j)
+		
 		time.sleep(1)
-
-		print (totalWords)
+		print(allWords)
 
 if __name__ == '__main__':
 	main()
