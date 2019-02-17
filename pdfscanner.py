@@ -3,8 +3,7 @@ import sys
 import re
 import time
 import PyPDF2
-from collections import Counter
-from collections import OrderedDict
+import collections
 
 
 def getPagesCount(pdf_file):
@@ -34,9 +33,9 @@ def extractWords(pdf_file):
 
 
 def arrayToDictionary(array):
-    counter = Counter(array)
-    ordered = OrderedDict(sorted(counter.items(), key=lambda t: t[1]))
-    result = OrderedDict(reversed(list(ordered.items())))
+    counter = collections.Counter(array)
+    ordered = collections.OrderedDict(sorted(counter.items(), key=lambda t: t[1]))
+    result = collections.OrderedDict(reversed(list(ordered.items())))
     return result
 
 
