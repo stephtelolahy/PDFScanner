@@ -3,16 +3,18 @@ import sys
 import re
 import time
 import PyPDF2
+from collections import Counter
+from collections import OrderedDict
 
 
-def getPageCount(pdf_file):
+def getPagesCount(pdf_file):
     pdfFileObj = open(pdf_file, 'rb')
     pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
     pages = pdfReader.numPages
     return pages
 
 
-def extractData(pdf_file, page):
+def extractText(pdf_file, page):
     pdfFileObj = open(pdf_file, 'rb')
     pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
     pageObj = pdfReader.getPage(page)
@@ -20,24 +22,23 @@ def extractData(pdf_file, page):
     return data
 
 
-def getWordCount(data):
-    data = data.split()
-    return len(data)
-
-
-def getWords(data):
-    return data.split()
-
-
 def extractWords(pdf_file):
     allWords = []
-    numPages = getPageCount(pdf_file)
+    numPages = getPagesCount(pdf_file)
     for i in range(numPages):
-        text = extractData(pdf_file, i)
-        words = getWords(text)
+        text = extractText(pdf_file, i)
+        words = text.split()
         for j in words:
-        	allWords.append(j)
+            allWords.append(j)
     return allWords
+
+
+def arrayToDictionary(array):
+    counter = Counter(array)
+    ordered = OrderedDict(sorted(counter.items(), key=lambda t: t[1]))
+    result = OrderedDict(reversed(list(ordered.items())))
+    return result
+
 
 def main():
     if len(sys.argv) != 2:
@@ -57,7 +58,12 @@ def main():
         # get the words in the pdf file
         allWords = extractWords(pdfFile)
         time.sleep(1)
-        print(allWords)
+        # print(allWords)
+
+        # create words occurences
+        wordOccurences = arrayToDictionary(allWords)
+        for (key, value) in wordOccurences.items():
+            print(value, key)
 
 
 if __name__ == '__main__':
